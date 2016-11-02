@@ -1,5 +1,27 @@
-import configparser
 #Parse configuration file
+import configparser
+#We will use os to acquire details of the operating system so we can determine if we are on Windows or not.
+import os
+#We use datetime to acquire the date and time
+import datetime
+#Import sys so we can exit the script when its likely to fail
+import sys
+#Import sys so we can exit the script when its likely to fail
+import sys
+#We use time to sleep
+import time
+import json
+import requests
+#We use selenium for browser automation
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+#random.choice will pick a random element from the list
+import random
+
+
 config = configparser.ConfigParser()
 configFilePath = "config.cfg"
 config.read(configFilePath)
@@ -55,9 +77,6 @@ exitCode = 1
 #Lets try to keep a revision tracking via commit number.
 revision="c.66"
 
-#We will use os to acquire details of the operating system so we can determine if we are on Windows or not.
-import os
-
 if "nt" in os.name:
 #We remove ANSI coloring for Windows
   class color:
@@ -109,9 +128,6 @@ else:
     pink='\033[95m'
     lightcyan='\033[96m'
 
-#We use datetime to acquire the date and time
-import datetime
-
 #In a threaded setup you can identify a printed line by its threadId - I just call it destroyerId
 def d_(destroyerId=None):
   if destroyerId is not None:
@@ -162,8 +178,6 @@ def printRunParameters():
     print(d_()+z_("Debug")+o_(debug))
   return
 
-#Import sys so we can exit the script when its likely to fail
-import sys
 
 def checkParameters():
   nah = False
@@ -212,8 +226,6 @@ def checkParameters():
     #Exit the script prematurely
     sys.exit(exitCode)
 
-#random.choice will pick a random element from the list
-import random
 
 def agent():
   """Returns a random user-agent."""
@@ -242,11 +254,6 @@ def agent():
   ]
   string = random.choice(browsers)
   return string
-
-#We use time to sleep
-import time
-import json
-import requests
 
 requests.packages.urllib3.disable_warnings()
 
@@ -554,10 +561,6 @@ def processAddToCart(productInfo):
     except:
       print (d_()+x_("Add-To-Cart")+lr_(mySize+" : "+"Not Found"))
 
-#We use selenium for browser automation
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-
 def addToCartChromeAJAX(pid,captchaToken):
   if marketLocale == "PT":
     baseADCUrl="http://www."+marketDomain+"/on/demandware.store/Sites-adidas-"+"MLT"+"-Site/"+market
@@ -652,9 +655,6 @@ def addToCartChromeAJAX(pid,captchaToken):
   browser.quit()
   return
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
 
 def activateCaptcha(driver):
   #Activate the catpcha widget
