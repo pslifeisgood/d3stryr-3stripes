@@ -21,112 +21,93 @@ from selenium.webdriver.support import expected_conditions
 #random.choice will pick a random element from the list
 import random
 
+class Destroyer:
 
-config = configparser.ConfigParser()
-configFilePath = "config.cfg"
-config.read(configFilePath)
-#Get the size array
-mySizes=config.get("user","mySizes").split(",")
-#Strip leading and trailing whitespaces if present in each array index and store back into mySizes array
-mySizes = [size.strip() for size in mySizes]
-#Pull user info for locale
-marketLocale=config.get("user","marketLocale")
-parametersLocale=config.get("user","parametersLocale")
-#Pull user info for masterPid
-masterPid=config.get("user","masterPid")
-#Token Harvesting info
-manuallyHarvestTokens=config.getboolean("harvest","manuallyHarvestTokens")
-numberOfTokens=config.getint("harvest","numberOfTokens")
-harvestDomain=config.get("harvest","harvestDomain")
-phpServerPort=config.get("harvest","phpServerPort")
-captchaTokens=[]
-#Pull 2captcha info
-proxy2Captcha=config.get("user","proxy2Captcha")
-apikey2captcha=config.get("user","apikey2captcha")
-#Pull run parameters for handing inventory endpoints
-useClientInventory=config.getboolean("user","useClientInventory")
-useVariantInventory=config.getboolean("user","useVariantInventory")
-#Pull run parameters for handing captchas
-processCaptcha=config.getboolean("user","processCaptcha")
-#Because end-users refuse to read and understand the config.cfg file lets go ahead
-#and set processCaptcha to True if harvest is turned on.
-if manuallyHarvestTokens:
-  processCaptcha = True
-processCaptchaDuplicate=config.getboolean("user","processCaptchaDuplicate")
-#Pull info based on marketLocale
-market=config.get("market",marketLocale)
-marketDomain=config.get("marketDomain",marketLocale)
-#Pull info based on parametersLocel
-apiEnv=config.get("clientId","apiEnv")
-clientId=config.get("clientId",parametersLocale)
-sitekey=config.get("sitekey",parametersLocale)
-#Pull info necessary for a Yeezy drop
-duplicate=config.get("duplicate","duplicate")
-cookies=config.get("cookie","cookie")
-#Pull the amount of time to sleep in seconds when needed
-sleeping=config.getint("sleeping","sleeping")
-#Are we debugging?
-debug=config.getboolean("debug","debug")
+    def __init__(self):
+        self.config = configparser.ConfigParser()
+        self.configFilePath = "config.cfg"
+        self.config.read(configFilePath)
+        #Get the size array
+        self.mySizes=self.config.get("user","mySizes").split(",")
+        #Strip leading and trailing whitespaces if present in each array index and store back into mySizes array
+        self.mySizes = [size.strip() for size in self.mySizes]
+        #Pull user info for locale
+        self.marketLocale=self.config.get("user","marketLocale")
+        self.parametersLocale=self.config.get("user","parametersLocale")
+        #Pull user info for masterPid
+        self.masterPid=self.config.get("user","masterPid")
+        #Token Harvesting info
+        self.manuallyHarvestTokens=self.config.getboolean("harvest","manuallyHarvestTokens")
+        self.numberOfTokens=self.config.getint("harvest","numberOfTokens")
+        self.harvestDomain=self.config.get("harvest","harvestDomain")
+        self.phpServerPort=self.config.get("harvest","phpServerPort")
+        self.captchaTokens=[]
+        #Pull 2captcha info
+        self.proxy2Captcha=self.config.get("user","proxy2Captcha")
+        self.apikey2captcha=self.config.get("user","apikey2captcha")
+        #Pull run parameters for handing inventory endpoints
+        self.useClientInventory=self.config.getboolean("user","useClientInventory")
+        self.useVariantInventory=self.config.getboolean("user","useVariantInventory")
+        #Pull run parameters for handing captchas
+        self.processCaptcha=self.config.getboolean("user","processCaptcha")
+        #Because end-users refuse to read and understand the config.cfg file lets go ahead
+        #and set processCaptcha to True if harvest is turned on.
+        if self.manuallyHarvestTokens:
+          self.processCaptcha = True
+        self.processCaptchaDuplicate=self.config.getboolean("user","processCaptchaDuplicate")
+        #Pull info based on marketLocale
+        self.market=self.config.get("market",marketLocale)
+        self.marketDomain=self.config.get("marketDomain",marketLocale)
+        #Pull info based on parametersLocel
+        self.apiEnv=self.config.get("clientId","apiEnv")
+        self.clientId=self.config.get("clientId",parametersLocale)
+        self.sitekey=self.config.get("sitekey",parametersLocale)
+        #Pull info necessary for a Yeezy drop
+        self.duplicate=self.config.get("duplicate","duplicate")
+        self.cookies=self.config.get("cookie","cookie")
+        #Pull the amount of time to sleep in seconds when needed
+        self.sleeping=self.config.getint("sleeping","sleeping")
+        #Are we debugging?
+        self.debug=self.config.getboolean("debug","debug")
+        #Set this for parameters checking
+        self.hypedSkus=["AHypedSkuForAnAdidasShoe","AnotherHypedSkuForAnAdidasShoe"]
+        #Code to indicate a shitty exit from the script
+        self.exitCode = 1
+        #Lets try to keep a revision tracking via commit number.
+        self.revision="c.66"
 
-#Set this for parameters checking
-hypedSkus=["AHypedSkuForAnAdidasShoe","AnotherHypedSkuForAnAdidasShoe"]
+        #Added by Pascal for cleanup
+        self.colorData = {'reset' : '\033[0m',
+                          'bold' : '\033[01m',
+                          'disable' : '\033[02m',
+                          'underline' : '\033[04m',
+                          'reverse' : '\033[07m',
+                          'strikethrough' : '\033[09m',
+                          'invisible' : '\033[08m',
+                          'black' : '\033[30m',
+                          'red' : '\033[31m',
+                          'green' : '\033[32m',
+                          'orange' : '\033[33m',
+                          'blue' : '\033[34m',
+                          'purple' : '\033[35m',
+                          'cyan' : '\033[36m',
+                          'lightgrey' : '\033[37m',
+                          'darkgrey' : '\033[90m',
+                          'lightred' : '\033[91m',
+                          'lightgreen' : '\033[92m',
+                          'yellow' : '\033[93m',
+                          'lightblue' : '\033[94m',
+                          'pink' : '\033[95m',
+                          'lightcyan' : '\033[96m'}
+        self.osName = os.name
 
-#Code to indicate a shitty exit from the script
-exitCode = 1
-
-#Lets try to keep a revision tracking via commit number.
-revision="c.66"
-
-if "nt" in os.name:
-#We remove ANSI coloring for Windows
-  class color:
-    reset=''
-    bold=''
-    disable=''
-    underline=''
-    reverse=''
-    strikethrough=''
-    invisible=''
-    black=''
-    red=''
-    green=''
-    orange=''
-    blue=''
-    purple=''
-    cyan=''
-    lightgrey=''
-    darkgrey=''
-    lightred=''
-    lightgreen=''
-    yellow=''
-    lightblue=''
-    pink=''
-    lightcyan=''
-else:
-#We use ANSI coloring for OSX/Linux
-  class color:
-    reset='\033[0m'
-    bold='\033[01m'
-    disable='\033[02m'
-    underline='\033[04m'
-    reverse='\033[07m'
-    strikethrough='\033[09m'
-    invisible='\033[08m'
-    black='\033[30m'
-    red='\033[31m'
-    green='\033[32m'
-    orange='\033[33m'
-    blue='\033[34m'
-    purple='\033[35m'
-    cyan='\033[36m'
-    lightgrey='\033[37m'
-    darkgrey='\033[90m'
-    lightred='\033[91m'
-    lightgreen='\033[92m'
-    yellow='\033[93m'
-    lightblue='\033[94m'
-    pink='\033[95m'
-    lightcyan='\033[96m'
+    def getColorCode(self, color):
+        if not "nt" in self.osName:
+            if color in self.colorData.keys():
+                #We use ANSI coloring for OSX/Linux
+                return self.colorData[color]
+        #We remove ANSI coloring for Windows
+        return ''
 
 #In a threaded setup you can identify a printed line by its threadId - I just call it destroyerId
 def d_(destroyerId=None):
