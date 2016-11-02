@@ -212,8 +212,8 @@ def checkParameters():
     #Exit the script prematurely
     sys.exit(exitCode)
 
-#randint allows us to obtain an random integer between two integer values a and b: int=randint(a,b)
-from random import randint
+#random.choice will pick a random element from the list
+import random
 
 def agent():
   """Returns a random user-agent."""
@@ -240,8 +240,7 @@ def agent():
       "Mozilla/5.0 (Linux; U; Android 2.2; en-us; SCH-I800 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36",
   ]
-  #In this usage we acquire a random index of the browser array.
-  string = browsers[randint(0,len(browsers)-1)]
+  string = random.choice(browsers)
   return string
 
 #We use time to sleep
