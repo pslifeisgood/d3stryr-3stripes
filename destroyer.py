@@ -109,37 +109,44 @@ class Destroyer:
         #We remove ANSI coloring for Windows
         return ''
 
-#In a threaded setup you can identify a printed line by its threadId - I just call it destroyerId
-def d_(destroyerId=None):
-  if destroyerId is not None:
-    return "Destroyer # "+str(destroyerId).rjust(4," ")+" "+str(datetime.datetime.now().time().strftime("%I:%M:%S.%f")[:-3])
-  else:
-    return "Destroyer # "+revision+" "+str(datetime.datetime.now().time().strftime("%I:%M:%S.%f")[:-3])
-def s_(string):
-  return color.lightgrey+" ["+str(string).center(21," ")+"]"+color.reset+" "
-#Color for exceptions
-def x_(string):
-  return color.lightred+" ["+str(string).center(21," ")+"]"+color.reset+" "
-#Color for debugging
-def z_(string):
-  return color.orange+" ["+str(string).center(21," ")+"]"+color.reset+" "
-#Colorize text with lightblue
-def lb_(string):
-  return color.lightblue+str(string)+color.reset
-#Colorize text with lightred
-def lr_(string):
-  return color.lightred+str(string)+color.reset
-#Colorize text with yellow
-def y_(string):
-  return color.yellow+str(string)+color.reset
-#Colorize text with orange
-def o_(string):
-  return color.orange+str(string)+color.reset
+    #In a threaded setup you can identify a printed line by its threadId - I just call it destroyerId
+    def d_(self, destroyerId=None):
+        if destroyerId is not None:
+            return "Destroyer # "+str(destroyerId).rjust(4," ")+" "+str(datetime.datetime.now().time().strftime("%I:%M:%S.%f")[:-3])
+        else:
+            return "Destroyer # "+revision+" "+str(datetime.datetime.now().time().strftime("%I:%M:%S.%f")[:-3])
+        
+    def s_(self, string):
+        return self.getColorCode('lightgrey') + " ["+str(string).center(21," ")+"]"+color.reset+" "
+    
+    #Color for exceptions
+    def x_(self, string):
+        return self.getColorCode('lightred') + " ["+str(string).center(21," ")+"]"+color.reset+" "
+    
+    #Color for debugging
+    def z_(self, string):
+        return self.getColorCode('orange') + " ["+str(string).center(21," ")+"]"+color.reset+" "
+    
+    #Colorize text with lightblue
+    def lb_(self, string):
+        return self.getColorCode('lightblue') + str(string)+color.reset
+    
+    #Colorize text with lightred
+    def lr_(self, string):
+        return self.getColorCode('lightred') + str(string)+color.reset
+    
+    #Colorize text with yellow
+    def y_(self, string):
+        return self.getColorCode('yellow') + str(string)+color.reset
+    
+    #Colorize text with orange
+    def o_(self, string):
+        return self.getColorCode('orange') + str(string)+color.reset
 
-def printRunParameters():
-  print(d_()+s_("Market Locale")+lb_(marketLocale))
-  print(d_()+s_("Parameters Locale")+lb_(parametersLocale))
-  print(d_()+s_("Market")+lb_(market))
+    def printRunParameters(self):
+        print(d_()+s_("Market Locale")+lb_(marketLocale))
+        print(d_()+s_("Parameters Locale")+lb_(parametersLocale))
+        print(d_()+s_("Market")+lb_(market))
   print(d_()+s_("Market Domain")+lb_(marketDomain))
   print(d_()+s_("API Environment")+lb_(apiEnv))
   print(d_()+s_("Market Client ID")+lb_(clientId))
